@@ -2,11 +2,10 @@
 
 #include "board.h"
 #include "common.h"
+#include "OthelloRule.h"
+#include "OthelloConfig.h"
 
 int player(int a,int b,int turn);
-void checkBoard( int board[side_max][length_max] );
-int revSide(int board[side_max][length_max], int player_side, int player_length, int turn);
-int sideLineFunction(int board[side_max][length_max],int player_side,int player_length,int LRflag );
 
 int main(void)
 {
@@ -70,69 +69,22 @@ int player(int length,int side,int turn)
 	}
 	if( turn == 0 ) {
 		revCheck = revSide(board,player_side,player_length, turn);
-		board[player_side][player_length] = 1;
-	} else {
-		board[player_side][player_length] = 2;
-	}
-	return 0;
-}
-
-int revSide(int board[side_max][length_max], int player_side, int player_length, int turn)
-{
-	int revLengthTmp = player_length; /* 後で、どこまで反転させたか分かるように置いておく。 */
-	int ret;
-
-	ret = sideLineFunction(board, player_side, player_length, 0);
-	ret = sideLineFunction(board, player_side, player_length, 1);
-	return 0;
-}
-int sideLineFunction(int board[side_max][length_max],int player_side,int player_length,int LRflag )
-{
-	int revLengthTmp = player_length; /* 後で、どこまで反転させたか分かるように置いておく。 */
-	
-	while( (player_length != 0) || (player_length != 8) ) {
-		if( LRflag == 0 ) {
-			player_length--;
-		} else {
-			player_length++;
-		}
-
-		if(player_length > 8 || player_length < -1 ) {
-			printf("%s:%d Error player_length:%d", __func__, __LINE__,player_length);
+		if(revCheck == 2) {
+			printf("ここに駒はおけません。\n");
+			printf("もう一度試してください\n");
 			return -1;
+		} else {
+		board[player_side][player_length] = 1;
 		}
-		if ( board[player_side][player_length] == 1 ) {
-			while ( player_length != revLengthTmp ) {
-				board[player_side][player_length] = 1;
-				if( LRflag == 0 ) {
-					player_length++;
-				} else {
-					player_length--;
-				}
-			}
-			break;
+	} else {
+		revCheck = revSide(board,player_side,player_length, turn);
+		if(revCheck == 2) {
+			printf("ここに駒はおけません。\n");
+			printf("もう一度試してください\n");
+			return -1;
+		} else {
+			board[player_side][player_length] = 2;
 		}
 	}
 	return 0;
-}
-
-/* この関数は、displayの代わりになる。 				*/
-/* displayと違い●と◯ではなく、1,2などで表示される。*/
-void checkBoard( int board[side_max][length_max] )
-{
-	int side_i;
-	int length_i;
-
-	printf("\n0 1 2 3 4 5 6 7");
-	for ( side_i = 0; side_i < 8; side_i++) {
-		if( side_i != 0 ) {
-			printf("%d ", side_i-1);
-		}
-		printf("\n");
-		for( length_i = 0; length_i < 8; length_i++ ) {
-			printf("%d ", board[side_i][length_i]);
-		}
-	}
-	printf("7\n");
-	return;
 }
