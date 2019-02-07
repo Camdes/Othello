@@ -49,7 +49,6 @@ int lengthLineFunction(int board[side_max][length_max],int player_side,int playe
 	}
 	return 0;
 }
-
 int sideLineFunction(int board[side_max][length_max],int player_side,int player_length,int LRflag ,int turn)
 {
 	int revLengthTmp = player_length; /* Œã‚ÅA‚Ç‚±‚Ü‚Å”½“]‚³‚¹‚½‚©•ª‚©‚é‚æ‚¤‚É’u‚¢‚Ä‚¨‚­B */
